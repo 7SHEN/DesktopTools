@@ -1,0 +1,40 @@
+'/*=========================================================================      
+' * FileName    Remind.vbs   
+' * Author      shenqionglong  
+' * Version     v1.0     
+' * MadeTime    2019-06-18 19:26:32   
+' * LastModify  2019-06-18 19:26:32   
+' *==========================================================================*/      
+option explicit
+on error resume next
+dim interval,delayTime,WshShell,i
+dim context,Time
+interval = inputbox("请输入提醒的时间间隔（单位/分钟）:","输入：",30)
+if interval="" or IsNull(interval) then
+ interval=30
+end if
+delayTime=interval*60000
+for i = 1 to 12
+	WScript.Sleep(delayTime)
+	Time=Hour(now)&":"&Minute(now)&":"&Second(now)
+
+	context ="现在时间：" &Time &" ,你已连续工作"&interval*i&"分钟。" &vbnewline & vbnewline & "休息一下，动动胳膊，伸伸腿……" & vbnewline & vbnewline
+	call PopupShowStr(context)
+	call ScreanProtection
+	WScript.Sleep(300000)
+next
+
+Function ScreanProtection
+ Dim WshShell
+ Set WshShell = WScript.CreateObject("WScript.Shell")
+ 'call bat command start ScreanProtection
+ WshShell.run("%comspec% /c start C:\Windows\System32\ssText3d.scr /s rundll32.exe user32.dll,LockWorkStation"),0,false
+End Function
+
+
+Function PopupShowStr(string)
+ Dim WshShell
+ Set WshShell = WScript.CreateObject("WScript.Shell")
+ 'remind msg 
+ call WshShell.Popup(string,3,"定时提醒：")
+End Function
